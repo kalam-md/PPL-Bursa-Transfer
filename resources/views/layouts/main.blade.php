@@ -5,9 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   @vite('resources/css/app.css')
 </head>
-<body>
-  <h1 class="text-3xl font-bold">
-    Hello world!
-  </h1>
+<body class="bg-stone-100">
+  <section class="flex">
+    @include('layouts.sidebar')
+
+    <main class="ml-[350px] p-8">
+      @yield('content')
+    </main>
+  </section>
 </body>
 </html>
