@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class Role
@@ -15,10 +16,15 @@ class Role
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !auth()->user()->role) {
-            abort(403);
-        }
+        $roles = array_slice(func_get_args(), 2);
 
-        return $next($request);
+        foreach ($roles as $role) {
+            $user = Auth::user()->role;
+            if ($user != $role) {
+                abort(403);
+            } else {
+                return $next($request);
+            }
+        }
     }
 }
