@@ -28,28 +28,25 @@ Route::post('/logout', [LoginController::class, 'logout']);
 // Beranda
 Route::get('/beranda', function () {
     return view('index');
-})->middleware('role')->name('beranda');
+})->middleware('auth')->name('beranda');
 
 // Profile
-Route::prefix('/profile')->middleware('role')->group(function () {
-    // dashboard admin
+Route::prefix('/profile')->middleware('auth')->group(function () {
     Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
 });
 
 // Team
-Route::resource('/team', TeamController::class);
+Route::resource('/team', TeamController::class)->middleware('auth', 'role:manager, admin');
 
 // Performansi
-Route::resource('/performansi', PerformansiController::class);
+Route::resource('/performansi', PerformansiController::class)->middleware('auth', 'role:manager, admin');
 
 // Buser
-Route::prefix('/bursa-transfer')->middleware('role')->group(function () {
-    // dashboard admin
+Route::prefix('/bursa-transfer')->middleware('auth', 'role:manager')->group(function () {
     Route::get('/', [BursaTransferController::class, 'index'])->name('buser.index');
 });
 
 // Notif
-Route::prefix('/notifikasi')->middleware('role')->group(function () {
-    // dashboard admin
+Route::prefix('/notifikasi')->middleware('auth', 'role:manager')->group(function () {
     Route::get('/', [NotifikasiController::class, 'index'])->name('notif.index');
 });
